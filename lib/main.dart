@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:odo_mobile_v2/login.dart';
-import 'package:odo_mobile_v2/members.dart';
-import 'package:odo_mobile_v2/orders.dart';
-import 'package:odo_mobile_v2/providers/member.dart';
-import 'package:odo_mobile_v2/providers/order.dart';
+import 'package:odo_sales_executive/login.dart';
+import 'package:odo_sales_executive/members.dart';
+import 'package:odo_sales_executive/orders.dart';
+import 'package:odo_sales_executive/providers/member.dart';
+import 'package:odo_sales_executive/providers/order.dart';
 import 'package:provider/provider.dart';
 
 
@@ -56,7 +56,7 @@ class MaterialAppWithInitialRoute extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'ODO Referrer',
-            theme: ThemeData(primarySwatch: Colors.deepPurple),
+            theme: ThemeData(primarySwatch: Colors.blue),
             initialRoute: route,
             routes: {
               '/': (context) => const Login(),
