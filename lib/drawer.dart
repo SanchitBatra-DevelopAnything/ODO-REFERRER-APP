@@ -37,14 +37,23 @@ class Sidebar extends StatelessWidget {
     ),
   ),
 ),
-
-          const ListTile(
+          ListTile(
             leading: Icon(Icons.person),
-            title: Text("My Profile"),
+            title: Text("Members"),
+            onTap: () {
+              //remove all routes and go to members
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/members', (route) => false);
+            }
           ),
-          const ListTile(
-            leading: Icon(Icons.logout),
-            title: Text("Logout"),
+          ListTile(
+            leading: Icon(Icons.factory),
+            title: Text("Orders"),
+            onTap: () {
+              //remove all routes and go to members
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/orders', (route) => false);
+            }
           ),
         ],
       ),);
