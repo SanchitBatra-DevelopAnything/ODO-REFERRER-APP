@@ -5,8 +5,10 @@ import 'package:http/http.dart' as http;
 class AuthProvider with ChangeNotifier {
    Map<String, dynamic>? loggedInReferrer;
    Map<String , dynamic> _referrerCredentials = {};
+   bool isReferrerDataLoaded = false;
 
   Future<void> fetchReferrerAccounts() async {
+    isReferrerDataLoaded = false;
     print("Fetching referrer accounts...");
   try {
     final url = Uri.parse(
@@ -34,7 +36,7 @@ class AuthProvider with ChangeNotifier {
       });
 
       print(_referrerCredentials);
-
+      isReferrerDataLoaded = true;
       notifyListeners();
     } else {
       print("Error status: ${response.statusCode}");

@@ -33,6 +33,7 @@ class _LoginState extends State<Login> {
   // ODO Purple
   @override
   Widget build(BuildContext context) {
+    //login button only visible when all refs downloaded for login.
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -81,45 +82,54 @@ class _LoginState extends State<Login> {
               const SizedBox(height: 40),
 
               // ✅ Login Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Login.primaryColor,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+              Consumer<AuthProvider>(
+                builder: (context, auth, _) {
+                  final isEnabled = auth.isReferrerDataLoaded;
+
+                  return SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isEnabled
+                            ? Login.primaryColor
+                            : Colors.grey,
+                      ),
+                      onPressed: isEnabled
+                          ? () async {
+                              final isSuccess = auth.loginReferrer(
+                                usernameController.text.trim(),
+                                passwordController.text.trim(),
+                              );
+
+                              if (isSuccess) {
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  "/members",
+                                  (route) =>
+                                      false, // removes all previous routes
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Invalid username or password",
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                          : null, // ❌ disabled while loading
+                      child: const Text(
+                        "LOGIN",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
-                  onPressed:() async {
-                    final provider = Provider.of<AuthProvider>(
-                      context,
-                      listen: false,
-                    );
-
-                    final isSuccess = provider.loginReferrer(
-                      usernameController.text.trim(),
-                      passwordController.text.trim(),
-                    );
-
-                    if (isSuccess) {
-                      Navigator.pushNamed(context, "/members");
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Invalid username or password")),
-                      );
-                    }
-                  },
-
-                  child: const Text(
-                    "LOGIN",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white, // text color ✅
-                    ),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
           ),
