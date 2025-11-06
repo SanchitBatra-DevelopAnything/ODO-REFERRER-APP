@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:odo_sales_executive/drawer.dart';
+import 'package:odo_sales_executive/providers/auth.dart';
 import 'package:odo_sales_executive/providers/order.dart';
 import 'package:provider/provider.dart';
 
@@ -21,24 +22,25 @@ class _OrdersState extends State<Orders> {
     if (_isFirstTime) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final ordersProvider = Provider.of<OrdersProvider>(context, listen: false);
+        final referrerId = Provider.of<AuthProvider>(context, listen: false).loggedInReferrer?['id'];
         final todaysDate = DateTime.now();
-        String formattedDate = "${todaysDate.day}-${todaysDate.month}-${todaysDate.year}";
-        ordersProvider.fetchOrderData(formattedDate);
+        String formattedDate = todaysDate.day.toString()+"-"+todaysDate.month.toString()+"-"+todaysDate.year.toString();
+        ordersProvider.fetchOrderData(formattedDate , referrerId);
       });
       _isFirstTime = false;
   }
   }
 
 
-   var orderData = {"orders" : [{"orderedFrom" : "Store A" , "status" : "delivered" , "amount" : 3500.0} , 
-                     {"orderedFrom" : "Store B" , "status" : "pending" , "amount" : 1500.0} ,
-                     {"orderedFrom" : "Store C" , "status" : "out-for-delivery" , "amount" : 2500.0},
-                     {"orderedFrom" : "Store C" , "status" : "out-for-delivery" , "amount" : 2500.0},
-                     {"orderedFrom" : "Store C" , "status" : "out-for-delivery" , "amount" : 2500.0},
-                     {"orderedFrom" : "Store C" , "status" : "pending" , "amount" : 2500.0},
-                     {"orderedFrom" : "Store D" , "status" : "delivered" , "amount" : 2500.0}],
-                     "totalAmount" : 17500.0
-   };
+  //  var orderData = {"orders" : [{"orderedFrom" : "Store A" , "status" : "delivered" , "amount" : 3500.0} , 
+  //                    {"orderedFrom" : "Store B" , "status" : "pending" , "amount" : 1500.0} ,
+  //                    {"orderedFrom" : "Store C" , "status" : "out-for-delivery" , "amount" : 2500.0},
+  //                    {"orderedFrom" : "Store C" , "status" : "out-for-delivery" , "amount" : 2500.0},
+  //                    {"orderedFrom" : "Store C" , "status" : "out-for-delivery" , "amount" : 2500.0},
+  //                    {"orderedFrom" : "Store C" , "status" : "pending" , "amount" : 2500.0},
+  //                    {"orderedFrom" : "Store D" , "status" : "delivered" , "amount" : 2500.0}],
+  //                    "totalAmount" : 17500.0
+  //  };
 
 
   Widget _buildStatusChip(String status) {

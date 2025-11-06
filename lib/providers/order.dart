@@ -8,7 +8,7 @@ class OrdersProvider with ChangeNotifier
   bool isLoading = false;
 
 
-  Future<void> fetchOrderData(String dateString) async {
+  Future<void> fetchOrderData(String dateString , String referrerId) async {
   isLoading = true;
 
   // ✅ clear old data right away
@@ -17,10 +17,10 @@ class OrdersProvider with ChangeNotifier
     "totalAmount": 0.0,
   };
   notifyListeners(); // ✅ UI will instantly show fresh loading state
-
+  print("Date String = "+dateString);
   try {
     final url = Uri.parse(
-      "https://<REGION>-<PROJECT_ID>.cloudfunctions.net/getOrdersForDate?date=$dateString"
+      "https://getordersforreferrerapp-jipkkwipyq-uc.a.run.app/?date=$dateString&referrerId=$referrerId",
     );
 
     final response = await http.get(url);
