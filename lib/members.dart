@@ -43,7 +43,51 @@ class _MembersState extends State<Members> {
       context: context,
       removeTop: true,
       child: Scaffold(
+      drawer : Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+  decoration: const BoxDecoration(
+    color: Color(0xFF2C2455),
+  ),
+  child: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12), // Optional: rounded corners
+          child: Image.asset(
+            'assets/logo.jpeg',
+            height: 80,
+          ),
+        ),
+        const SizedBox(height: 10),
+        const Text(
+          "ODO Sales Executive",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    ),
+  ),
+),
+
+          const ListTile(
+            leading: Icon(Icons.person),
+            title: Text("My Profile"),
+          ),
+          const ListTile(
+            leading: Icon(Icons.logout),
+            title: Text("Logout"),
+          ),
+        ],
+      ),),
         appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
           title: Text(
             "My Referrals (${members.length})",
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
