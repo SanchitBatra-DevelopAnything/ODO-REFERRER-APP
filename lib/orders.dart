@@ -84,6 +84,7 @@ class _OrdersState extends State<Orders> {
     final ordersProvider = Provider.of<OrdersProvider>(context);
     final orders = ordersProvider.ordersData["orders"] ?? [];
     final totalAmount = ordersProvider.ordersData["totalAmount"];
+    final referrerId = Provider.of<AuthProvider>(context, listen: false).loggedInReferrer?['id'];
     return MediaQuery.removePadding(
     context: context,
     removeTop: true,
@@ -96,6 +97,40 @@ class _OrdersState extends State<Orders> {
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: const Color(0xFF2C2455),
+        actions: [
+    IconButton(
+      icon: const Icon(Icons.calendar_today, color: Colors.white),
+      onPressed: () async {
+  DateTime today = DateTime.now();
+  DateTime minDate = today.subtract(const Duration(days: 2));
+  DateTime initialDate =
+      ordersProvider.selectedDate != null ? ordersProvider.selectedDate! : today;
+
+  DateTime? pickedDate = await showDatePicker(
+    context: context,
+    initialDate: initialDate,
+    firstDate: minDate,
+    lastDate: today,
+    builder: (context, child) => Theme(
+      data: Theme.of(context).copyWith(
+        colorScheme: const ColorScheme.light(
+          primary: Color(0xFF2C2455), // Your purple color ✅
+        ),
+      ),
+      child: child!,
+    ),
+  );
+
+  if (pickedDate != null) {
+    final dateString =
+        "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
+
+    Provider.of<OrdersProvider>(context, listen: false)
+        .fetchOrderData(dateString , referrerId);
+  }
+},
+    ),
+  ],
       ),
       body: ordersProvider.isLoading
             ? const Center(

@@ -6,10 +6,12 @@ class OrdersProvider with ChangeNotifier
 {
   Map<String, dynamic> ordersData = {};
   bool isLoading = false;
+  DateTime? selectedDate;
 
 
   Future<void> fetchOrderData(String dateString , String referrerId) async {
   isLoading = true;
+  selectedDate = _parseDate(dateString);
 
   // ✅ clear old data right away
   ordersData = {
@@ -36,6 +38,15 @@ class OrdersProvider with ChangeNotifier
 
   isLoading = false;
   notifyListeners();
+}
+
+DateTime _parseDate(String dateStr) {
+  final parts = dateStr.split("-");
+  return DateTime(
+    int.parse(parts[2]),
+    int.parse(parts[1]),
+    int.parse(parts[0]),
+  );
 }
 
 }
