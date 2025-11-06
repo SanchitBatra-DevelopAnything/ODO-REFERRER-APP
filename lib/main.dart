@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:odo_sales_executive/login.dart';
 import 'package:odo_sales_executive/members.dart';
 import 'package:odo_sales_executive/orders.dart';
+import 'package:odo_sales_executive/providers/auth.dart';
 import 'package:odo_sales_executive/providers/member.dart';
 import 'package:odo_sales_executive/providers/order.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => MembersProvider()),
         ChangeNotifierProvider(create: (context) => OrdersProvider()),
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
       ],
       child: const MaterialAppWithInitialRoute(),
     );

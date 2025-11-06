@@ -1,10 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:odo_sales_executive/providers/auth.dart';
+import 'package:provider/provider.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
 
-  static const Color primaryColor = Color(0xFF2C2455); // ODO Purple
+  static const Color primaryColor = Color(0xFF2C2455);
+  @override
+  State<Login> createState() => _LoginState();
+}
 
+class _LoginState extends State<Login> {
+  bool _isFirstTime = true;
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!mounted) {
+      print("Returned back");
+      return;
+    }
+    if (_isFirstTime) {
+      Provider.of<AuthProvider>(context, listen: false).fetchReferrerAccounts();
+    }
+    _isFirstTime = false; //never run the above if again.
+    super.didChangeDependencies();
+  }
+
+  // ODO Purple
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,10 +47,17 @@ class Login extends StatelessWidget {
                 height: 120,
               ),
               const SizedBox(height: 20),
-              Text("Sales Executive Login" , style: TextStyle(color: Color(0xFF2C2455) , fontWeight: FontWeight.bold),),
-              const SizedBox(height: 10,),
+              Text(
+                "Sales Executive Login",
+                style: TextStyle(
+                  color: Color(0xFF2C2455),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
               // ✅ Username TextField
               TextField(
+                controller: usernameController,
                 decoration: InputDecoration(
                   labelText: "Username",
                   border: OutlineInputBorder(
@@ -36,6 +69,7 @@ class Login extends StatelessWidget {
 
               // ✅ Password TextField
               TextField(
+                controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: "Password",
@@ -51,15 +85,32 @@ class Login extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
+                    backgroundColor: Login.primaryColor,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/orders'); // example action
+                  onPressed:() async {
+                    final provider = Provider.of<AuthProvider>(
+                      context,
+                      listen: false,
+                    );
+
+                    final isSuccess = provider.loginReferrer(
+                      usernameController.text.trim(),
+                      passwordController.text.trim(),
+                    );
+
+                    if (isSuccess) {
+                      Navigator.pushNamed(context, "/members");
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Invalid username or password")),
+                      );
+                    }
                   },
+
                   child: const Text(
                     "LOGIN",
                     style: TextStyle(
