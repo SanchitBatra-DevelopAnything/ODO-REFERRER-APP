@@ -22,7 +22,7 @@ class OrdersProvider with ChangeNotifier
   print("Date String = "+dateString);
   try {
     final url = Uri.parse(
-      "https://getordersforreferrerapp-jipkkwipyq-uc.a.run.app/?date=$dateString&referrerId=$referrerId",
+      "https://getordersforreferrerapp-jipkkwipyq-uc.a.run.app/" + "?date=" +dateString.toString() + "&referrerId=" + referrerId.toString(),
     );
 
     final response = await http.get(url);

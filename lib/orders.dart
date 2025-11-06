@@ -122,8 +122,8 @@ class _OrdersState extends State<Orders> {
   );
 
   if (pickedDate != null) {
-    final dateString =
-        "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
+
+    final dateString = pickedDate.day.toString() + "-" + pickedDate.month.toString() + "-" + pickedDate.year.toString();
 
     Provider.of<OrdersProvider>(context, listen: false)
         .fetchOrderData(dateString , referrerId);
