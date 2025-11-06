@@ -44,8 +44,8 @@ class _MembersState extends State<Members> {
       removeTop: true,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "My Members",
+          title: Text(
+            "My Referrals (${members.length})",
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
           backgroundColor: const Color(0xFF2C2455),
