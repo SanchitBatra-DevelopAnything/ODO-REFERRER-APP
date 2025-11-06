@@ -17,16 +17,18 @@ class _MembersState extends State<Members> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isFirstTime) {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      final referrer = authProvider.loggedInReferrer;
-      final referrerId = referrer?['id'];
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final authProvider = Provider.of<AuthProvider>(context, listen: false);
+        final referrer = authProvider.loggedInReferrer;
+        final referrerId = referrer?['id'];
 
-      if (referrerId != null) {
-        Provider.of<MembersProvider>(
-          context,
-          listen: false,
-        ).fetchMyMembers(referrerId);
-      }
+        if (referrerId != null) {
+          Provider.of<MembersProvider>(
+            context,
+            listen: false,
+          ).fetchMyMembers(referrerId);
+        }
+      });
 
       _isFirstTime = false;
     }
@@ -37,29 +39,41 @@ class _MembersState extends State<Members> {
     final membersProvider = Provider.of<MembersProvider>(context);
     final members = membersProvider.membersForMe; // List<String>
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "My Members",
-          style: TextStyle(fontWeight: FontWeight.bold , color: Colors.white),
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "My Members",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          backgroundColor: const Color(0xFF2C2455),
         ),
-        backgroundColor: const Color(0xFF2C2455),
+        body: membersProvider.isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              ) // ✅ Loading state
+            : members.isEmpty
+            ? const Center(child: Text("No members found!"))
+            : ListView.separated(
+                itemCount: members.length,
+                separatorBuilder: (_, __) => const Divider(height: 1),
+                itemBuilder: (context, index) {
+                  final memberName = members[index]; // ✅ string
+                  return ListTile(
+                    title: Text(
+                      memberName,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    leading: const Icon(Icons.person),
+                  );
+                },
+              ),
       ),
-      body: membersProvider.isLoading
-          ? const Center(child: CircularProgressIndicator()) // ✅ Loading state
-          : members.isEmpty
-          ? const Center(child: Text("No members found!"))
-          : ListView.separated(
-              itemCount: members.length,
-              separatorBuilder: (_, __) => const Divider(height: 1),
-              itemBuilder: (context, index) {
-                final memberName = members[index]; // ✅ string
-                return ListTile(
-                  title: Text(memberName, style: const TextStyle(fontSize: 16)),
-                  leading: const Icon(Icons.person),
-                );
-              },
-            ),
     );
   }
 }

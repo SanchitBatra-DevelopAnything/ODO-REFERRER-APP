@@ -10,9 +10,11 @@ class MembersProvider with ChangeNotifier {
     isLoading = true;
     notifyListeners();
 
+    print("Referrer id "+ referrerId);
+
     try {
       final url = Uri.parse(
-        "https://getdistributorsbyreferrer-jipkkwipyq-uc.a.run.app/?$referrerId", 
+        "https://getdistributorsbyreferrer-jipkkwipyq-uc.a.run.app/?referrerId=$referrerId", 
       );
 
       final response = await http.get(url);
