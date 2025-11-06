@@ -80,7 +80,7 @@ class _OrdersState extends State<Orders> {
   @override
   Widget build(BuildContext context) {
     final ordersProvider = Provider.of<OrdersProvider>(context);
-    final orders = ordersProvider.ordersData["orders"];
+    final orders = ordersProvider.ordersData["orders"] ?? [];
     final totalAmount = ordersProvider.ordersData["totalAmount"];
     return MediaQuery.removePadding(
     context: context,
